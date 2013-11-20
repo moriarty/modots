@@ -1,0 +1,67 @@
+## These are variables you might change often
+_ROS_DISTRO=hydro
+_PRINT=true # display ROS info in new bash sessions
+_FANCY=true 
+export ROBOT=youbot-brsu-2
+export ROBOT_ENV=brsu-c025
+export ROS_MASTER_URI=http://localhost:11311
+
+## These are used to locate your catkin_ws/devel/setup.bash
+_ROS_WS=$HOME/workspace/ros_ws
+_CATKIN_WS="catkin_ws"
+
+if [ -d /opt/ros/$_ROS_DISTRO ]; then
+    source /opt/ros/$_ROS_DISTRO/setup.bash
+fi
+
+# Note we now check for ROS_DISTRO not _ROS_DISTRO
+if [ -n "$ROS_DISTRO" ]; then
+    catkin_ws_path=${_ROS_WS}/${ROS_DISTRO}/${_CATKIN_WS}
+    setup_file=${catkin_ws_path}/devel/setup.bash
+    if [ -f $setup_file ]; then
+        source $setup_file
+    fi
+    export ROS_PACKAGE_PATH=${catkin_ws_path}/devel:$ROS_PACKAGE_PATH
+    export ROS_WORKSPACE=${catkin_ws_path}
+fi
+
+## Add other settings here
+
+
+out_info=("Sourced Setup: "$setup_file
+          "ROS-VERSION: "$ROS_ROOT
+          "ROS-MASTER: "$ROS_MASTER_URI
+          "ROBOT: "$ROBOT
+          "ENV: "$ROBOT_ENV
+)
+
+asciiROS(){
+    c0="\033[32m"
+    c1="\033[01;34m"
+    start_line=1
+    full_output=("${c1}ooooooooo.     .oooooo.    .oooooo..o     "
+                 "${c1}\`888   \`Y88.  d8P\'  \`Y8b  d8P\'    \`Y8     ${c0}%s"
+                 "${c1} 888   .d88\' 888      888 Y88bo.          ${c0}%s"
+                 "${c1} 888ooo88P\'  888      888  \`\"Y8888o.      ${c0}%s"
+                 "${c1} 888\`88b.    888      888      \`\"Y88b     ${c0}%s"
+                 "${c1} 888  \`88b.  \`88b    d88\' oo     .d8P     ${c0}%s"
+                 "${c1}o888o  o888o  \`Y8bood8P\'  8\"\"88888P\'      ${c0}%s"
+                )
+    
+    for ((i=0; i<${#full_output[*]}; i++)); do
+        # echo "${out_array[@]}"
+        printf "${full_output[i]}\n" "${out_info[i]}"
+    done
+}
+
+if $_PRINT; then
+    if $_FANCY; then
+        asciiROS
+    else
+        echo ${out_info[@]}
+    fi
+fi
+
+_ros_bashrc_vars=(i c0 c1 start_line full_output _FANCY _ROS_WS _CATKIN_WS _ROS_DISTRO _PRINT catkin_ws_path setup_file)
+unset ${_ros_bashrc_vars[@]}
+unset _ros_bashrc_vars
