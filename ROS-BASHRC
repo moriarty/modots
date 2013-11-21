@@ -28,9 +28,8 @@ fi
 ## Add other settings here
 
 
-out_info=("Sourced Setup: "$setup_file
-          "ROS-VERSION: "$ROS_ROOT
-          "ROS-MASTER: "$ROS_MASTER_URI
+out_info=("<<"`echo $ROS_DISTRO | tr [:lower:] [:upper:]`">>"
+          "MASTER: "$ROS_MASTER_URI
           "ROBOT: "$ROBOT
           "ENV: "$ROBOT_ENV
 )
@@ -39,18 +38,17 @@ asciiROS(){
     c0="\033[32m"
     c1="\033[01;34m"
     start_line=1
-    full_output=("${c1}ooooooooo.     .oooooo.    .oooooo..o     "
-                 "${c1}\`888   \`Y88.  d8P\'  \`Y8b  d8P\'    \`Y8     ${c0}%s"
-                 "${c1} 888   .d88\' 888      888 Y88bo.          ${c0}%s"
-                 "${c1} 888ooo88P\'  888      888  \`\"Y8888o.      ${c0}%s"
-                 "${c1} 888\`88b.    888      888      \`\"Y88b     ${c0}%s"
-                 "${c1} 888  \`88b.  \`88b    d88\' oo     .d8P     ${c0}%s"
-                 "${c1}o888o  o888o  \`Y8bood8P\'  8\"\"88888P\'      ${c0}%s"
+    full_output=("${c1}RRRRRR   OOOOO   SSSSS   ${c0}"
+                 "${c1}RR   RR OO   OO SS       ${c0}%s"
+                 "${c1}RRRRRR  OO   OO  SSSSS   ${c0}%s"
+                 "${c1}RR  RR  OO   OO      SS  ${c0}%s"
+                 "${c1}RR   RR  OOOO0   SSSSS   ${c0}%s"
+                 "${c1}                         ${c0}%s"
                 )
     
     for ((i=0; i<${#full_output[*]}; i++)); do
         # echo "${out_array[@]}"
-        printf "${full_output[i]}\n" "${out_info[i]}"
+        printf "${full_output[i]}\n" "${out_info[i-$start_line]}"
     done
 }
 
